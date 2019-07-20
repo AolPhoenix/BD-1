@@ -200,7 +200,19 @@ def update(cursor):
                 elif(pregunta==9):
                     cursor.execute("update tabla SET precio='"+str(preguntados)+"' WHERE id="+str(dato)+"")
                 elif(pregunta==10):
+<<<<<<< Updated upstream
                     cursor.execute("update tabla SET stock='"+str(preguntados)+"' WHERE id="+str(dato)+"")
+=======
+                    print(preguntados)
+                    cursor.execute("update tabla SET stock="+int(preguntados)+" WHERE id="+str(dato)+"")
+                    if(int(preguntados) < 10):
+                        bodega=10-int(preguntados)
+                        print(colored.cyan("ADVERTENCIA: EL STOCK HA LLEGADO A SU LÍMITE DE MENOS DE 10 UNIDADES, SE DEBEN DE SACAR "+str(bodega)+" EXISTENCIAS DE LA BODEGA COMO MÍNIMO, LA BASE DE DATOS SE ACTUALIZARÁ AUTOMATICAMENTE CON EL MÍNIMO INDICADO DESCONTANDOLO DE LA BODEGA.\n"))
+                        print(colored.red("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPresione cualquier tecla para continuar..."))
+
+                        if(msvcrt.getch()):
+                            menuflag=True
+>>>>>>> Stashed changes
                 elif(pregunta==11):
                     cursor.execute("update tabla SET bodega='"+str(preguntados)+"' WHERE id="+str(dato)+"")
                 elif(pregunta==12):
@@ -370,6 +382,57 @@ FROM SansanoPlay
 INNER JOIN Nintendo
 ON SansanoPlay.id = Nintendo.id""")
 
+#Trigger específico utilizado para el manejo del STOCK respecto a las VENTAS y a las existencias en bodega, intenta preveer que el stock no baje de 10 a cualquier costo. Si por alguna razón las ventas son demasiado altas, evita su venta por falta de existencias.
+cursor.execute("""create or replace TRIGGER stock
+INSTEAD OF UPDATE ON tabla
+BEGIN
+ IF :new.stock < 10 THEN
+ IF :new.stock < 0 THEN
+ IF :old.bodega+:new.stock>0 THEN
+ IF :old.bodega BETWEEN 0 AND 10 THEN
+ UPDATE SansanoPlay SET vendidos=:new.vendidos, stock=:old.bodega+:new.stock, bodega=0 WHERE id = :old.id;
+ UPDATE Nintendo SET ventasglobales=:new.ventasglobales WHERE id=:old.id;
+ ELSE
+ UPDATE SansanoPlay SET vendidos=:new.vendidos, stock=10, bodega=:old.bodega+:new.stock-10 WHERE id = :old.id;
+ UPDATE Nintendo SET ventasglobales=:new.ventasglobales WHERE id=:old.id;
+ END IF;
+ END IF;
+ ELSIF :new.stock >= 0 THEN
+ IF :old.bodega-(10-:new.stock) > 0 THEN
+ UPDATE SansanoPlay SET vendidos=:new.vendidos, stock=10, bodega=:old.bodega-(10-:new.stock) WHERE id = :old.id;
+ UPDATE Nintendo SET ventasglobales=:new.ventasglobales WHERE id=:old.id;
+ ELSIF 10-:new.stock != 0 AND :new.stock != 0 THEN
+ IF :old.bodega BETWEEN 0 AND 10 THEN
+ IF :old.bodega = 0 THEN
+ UPDATE SansanoPlay SET vendidos=:new.vendidos, stock=:new.stock, bodega=0 WHERE id = :old.id;
+ UPDATE Nintendo SET ventasglobales=:new.ventasglobales WHERE id=:old.id;
+ ELSE
+ UPDATE SansanoPlay SET vendidos=:new.vendidos, stock=10, bodega=0 WHERE id = :old.id;
+ UPDATE Nintendo SET ventasglobales=:new.ventasglobales WHERE id=:old.id;
+ END IF;
+ ELSE
+ UPDATE SansanoPlay SET vendidos=:new.vendidos, stock=10, bodega=(10-:new.stock) WHERE id = :old.id;
+ UPDATE Nintendo SET ventasglobales=:new.ventasglobales WHERE id=:old.id;
+ END IF;
+ ELSIF :new.stock = 0 THEN
+ IF :old.bodega = 0 THEN
+ UPDATE SansanoPlay SET vendidos=:new.vendidos, stock=:new.stock, bodega=0 WHERE id = :old.id;
+ UPDATE Nintendo SET ventasglobales=:new.ventasglobales WHERE id=:old.id;
+ ELSE
+ UPDATE SansanoPlay SET vendidos=:new.vendidos, stock=10, bodega=0 WHERE id = :old.id;
+ UPDATE Nintendo SET ventasglobales=:new.ventasglobales WHERE id=:old.id;
+ END IF;
+ END IF;
+ END IF;
+ ELSIF :old.stock != :new.stock THEN
+ UPDATE SansanoPlay SET vendidos=:new.vendidos, stock=:new.stock, bodega=:new.bodega WHERE id=:old.id;
+ UPDATE Nintendo SET ventasglobales=:new.ventasglobales WHERE id=:old.id;
+ ELSE
+ UPDATE SansanoPlay SET nombre=:new.nombre, precio=:new.precio, stock=:new.stock, bodega=:new.bodega, vendidos=:new.vendidos WHERE id = :old.id;
+ UPDATE Nintendo SET nombre=:new.nombre, genero=:new.genero, desarrollador=:new.desarrollador, publicador=:new.publicador, fechadeestreno=:new.fechadeestreno, exclusividad=:new.exclusividad, ventasglobales=:new.ventasglobales, rating=:new.rating WHERE id = :old.id;
+ END IF;
+END;""")
+
 
 #Se realiza un trigger que se activa cada vez que se modifica la view. Modifica los datos en las tablas por separado.
 cursor.execute("""CREATE OR REPLACE TRIGGER triggerview
@@ -505,6 +568,11 @@ menuflag=True
 
 
 while(menuflag):
+<<<<<<< Updated upstream
+=======
+
+
+>>>>>>> Stashed changes
     print(colored.cyan("Bienvenido a la Base de datos de Sansanoplay, favor de elegir la opción que desee:\n"))
     print(colored.cyan('1.-')+colored.yellow('Funciones CRUD\n'))
     print(colored.cyan('2.-')+colored.yellow('Los 5 exclusivos más caros\n'))
