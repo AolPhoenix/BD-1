@@ -200,19 +200,15 @@ def update(cursor):
                 elif(pregunta==9):
                     cursor.execute("update tabla SET precio='"+str(preguntados)+"' WHERE id="+str(dato)+"")
                 elif(pregunta==10):
-<<<<<<< Updated upstream
-                    cursor.execute("update tabla SET stock='"+str(preguntados)+"' WHERE id="+str(dato)+"")
-=======
-                    print(preguntados)
                     cursor.execute("update tabla SET stock="+int(preguntados)+" WHERE id="+str(dato)+"")
                     if(int(preguntados) < 10):
                         bodega=10-int(preguntados)
                         print(colored.cyan("ADVERTENCIA: EL STOCK HA LLEGADO A SU LÍMITE DE MENOS DE 10 UNIDADES, SE DEBEN DE SACAR "+str(bodega)+" EXISTENCIAS DE LA BODEGA COMO MÍNIMO, LA BASE DE DATOS SE ACTUALIZARÁ AUTOMATICAMENTE CON EL MÍNIMO INDICADO DESCONTANDOLO DE LA BODEGA.\n"))
                         print(colored.red("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPresione cualquier tecla para continuar..."))
 
+                        print(colored.red("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPresione cualquier tecla para continuar..."))
                         if(msvcrt.getch()):
-                            menuflag=True
->>>>>>> Stashed changes
+                            continue
                 elif(pregunta==11):
                     cursor.execute("update tabla SET bodega='"+str(preguntados)+"' WHERE id="+str(dato)+"")
                 elif(pregunta==12):
@@ -568,11 +564,6 @@ menuflag=True
 
 
 while(menuflag):
-<<<<<<< Updated upstream
-=======
-
-
->>>>>>> Stashed changes
     print(colored.cyan("Bienvenido a la Base de datos de Sansanoplay, favor de elegir la opción que desee:\n"))
     print(colored.cyan('1.-')+colored.yellow('Funciones CRUD\n'))
     print(colored.cyan('2.-')+colored.yellow('Los 5 exclusivos más caros\n'))
