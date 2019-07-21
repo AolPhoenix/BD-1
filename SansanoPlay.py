@@ -205,8 +205,6 @@ def update(cursor):
                         bodega=10-int(preguntados)
                         print(colored.cyan("ADVERTENCIA: EL STOCK HA LLEGADO A SU LÍMITE DE MENOS DE 10 UNIDADES, SE DEBEN DE SACAR "+str(bodega)+" EXISTENCIAS DE LA BODEGA COMO MÍNIMO, LA BASE DE DATOS SE ACTUALIZARÁ AUTOMATICAMENTE CON EL MÍNIMO INDICADO DESCONTANDOLO DE LA BODEGA.\n"))
                         print(colored.red("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPresione cualquier tecla para continuar..."))
-
-                        print(colored.red("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPresione cualquier tecla para continuar..."))
                         if(msvcrt.getch()):
                             continue
                 elif(pregunta==11):
