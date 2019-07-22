@@ -351,7 +351,10 @@ def ventas (cursor):
             print(colored.red("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPresione cualquier tecla para continuar..."))
             msvcrt.getch()
     except:
-            cursor.execute("SELECT nombre,stock,bodega FROM tabla WHERE nombre='"+dato+"'")
+            try:
+                cursor.execute("SELECT nombre,stock,bodega FROM tabla WHERE nombre=q'<"+dato+">'")
+            except:
+                cursor.execute("SELECT nombre,stock,bodega FROM tabla WHERE nombre=q''<"+dato+">''")
             tupla=cursor.fetchone()
             ventas=input("Indique la cantidad de existencias vendidas: ")
             if(int(tupla[1])-int(ventas)<10):
@@ -359,7 +362,10 @@ def ventas (cursor):
                 if(int(tupla[2])-10-(int(tupla[1])-int(ventas)) < 0):
                     print("NO HAY SUFICIENTES EXISTENCIAS EN BODEGA, DEBE ACTUALIZAR LAS EXISTENCIAS EN STOCK Y BODEGA MANUALMENTE\n")
             stock=int(tupla[1])
-            cursor.execute("UPDATE tabla SET stock="+str((stock-int(ventas)))+" WHERE nombre='"+dato+"'")
+            try:
+                cursor.execute("UPDATE tabla SET stock="+str((stock-int(ventas)))+" WHERE nombre=q'<"+dato+">'")
+            except:
+                cursor.execute("UPDATE tabla SET stock="+str((stock-int(ventas)))+" WHERE nombre=q''<"+dato+">''")
             print(colored.cyan("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSTOCK ACTUALIZADO\n"))
             print(colored.red("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPresione cualquier tecla para continuar..."))
             msvcrt.getch()
