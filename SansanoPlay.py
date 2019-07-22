@@ -331,6 +331,34 @@ def rating(cursor):
         menuflag=True
 
 
+def ventas (cursor):
+    print(colored.cyan("--------------------------------------------------------------------\n|")+colored.yellow("Inserte la ID o Nombre del juego que quieres vender")+colored.cyan("|\n--------------------------------------------------------------------\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"))
+    dato=input()
+    try:
+        dato=int(dato)
+        if(dato!=0):
+            cursor.execute("SELECT id,stock,bodega FROM tabla WHERE id="+str(dato)+"")
+            ventas=input("Indique la cantidad de existencias vendidas: ")
+            tupla=cursor.fetchone()
+            if(int(tupla[1])-int(ventas)<10):
+                print("\nADVERTENCIA: EL STOCK HA DISMINUIDO DE 10, FAVOR DE EXTRAER POR LO MENOS "+str(10-(int(tupla[1])-int(ventas)))+" EXISTENCIAS DE LA BODEGA LA BASE DE DATOS SE ACTUALIZARÁ AUTOMÁTICAMENTE\n")
+                if(int(tupla[2])-10-(int(tupla[1])-int(ventas)) < 0):
+                    print("NO HAY SUFICIENTES EXISTENCIAS EN BODEGA, DEBE ACTUALIZAR LAS EXISTENCIAS EN STOCK Y BODEGA MANUALMENTE\n")
+            stock=int(tupla[1])
+            cursor.execute("UPDATE tabla SET stock="+str((stock-int(ventas)))+" WHERE id="+str(dato)+"")
+            print(colored.cyan("STOCK ACTUALIZADO\n"))
+    except:
+            cursor.execute("SELECT nombre,stock,bodega FROM tabla WHERE nombre='"+dato+"'")
+            tupla=cursor.fetchone()
+            ventas=input("Indique la cantidad de existencias vendidas: ")
+            if(int(tupla[1])-int(ventas)<10):
+                print("\nADVERTENCIA: EL STOCK HA DISMINUIDO DE 10, FAVOR DE EXTRAER POR LO MENOS "+str(10-(int(tupla[1])-int(ventas)))+" EXISTENCIAS DE LA BODEGA LA BASE DE DATOS SE ACTUALIZARÁ AUTOMÁTICAMENTE\n")
+                if(int(tupla[2])-10-(int(tupla[1])-int(ventas)) < 0):
+                    print("NO HAY SUFICIENTES EXISTENCIAS EN BODEGA, DEBE ACTUALIZAR LAS EXISTENCIAS EN STOCK Y BODEGA MANUALMENTE\n")
+            stock=int(tupla[1])
+            cursor.execute("UPDATE tabla SET stock="+str((stock-int(ventas)))+" WHERE nombre='"+dato+"'")
+            print(colored.cyan("STOCK ACTUALIZADO\n"))
+
 
 
 #Se crea la tabla de Sansanoplay y de Nintendo, se elige las id de ambas tablas como claves Primarias.
@@ -572,8 +600,9 @@ menuflag=True
 
 while(menuflag):
 
-    
+
     print(colored.cyan("Bienvenido a la Base de datos de Sansanoplay, favor de elegir la opción que desee:\n"))
+    print(colored.cyan('0.-')+colored.yellow('Vender\n'))
     print(colored.cyan('1.-')+colored.yellow('Funciones CRUD\n'))
     print(colored.cyan('2.-')+colored.yellow('Los 5 exclusivos más caros\n'))
     print(colored.cyan('3.-')+colored.yellow('Los 3 juegos más vendidos\n'))
@@ -582,8 +611,10 @@ while(menuflag):
     print(colored.cyan('6.-')+colored.yellow('Salir\n'))
     print(colored.cyan("\n\n\n\n\n\n\n\n\n\n\n\n\n\nSeleccione su opción: "))
     eleccion=int(input(""))
+    if(eleccion==0):
+        ventas(cursor)
 
-    if(eleccion==1):
+    elif(eleccion==1):
         print(colored.cyan("Seleccione la función CRUD que desea seleccionar:\n"))
         print(colored.cyan("1.-")+colored.yellow("Crear")+colored.cyan("                    (C)\n"))
         print(colored.cyan("2.-")+colored.yellow("Leer")+colored.cyan("                     (R)\n"))
