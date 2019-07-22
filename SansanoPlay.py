@@ -14,7 +14,13 @@ import time
 #El parámetro DBQ debe igualarse al nombre de su base de datos
 #El parámetro Uid debe igualarse al nombre de usuario de su base de datos, por defecto es SYSTEM
 #El parámetro Pwd debe igualarse a la contraseña de la base de datos
-connection = pyodbc.connect('DSN=tarea;DBQ=tarea;Uid=SYSTEM;Pwd=Leche01234')
+print("Este programa utiliza la libreria PYODBC, para poder hacerlo funcionar correctamente se debe especificar los siguientes datos:\n ")
+dsn=input("Ingrese el atributo DSN(Driver utilizado para la conexión entre la base de datos Oracle y python, algunos drivers como el de oracle permite nombres personalizados): ")
+dbq=input("Ingrese el atributo DBQ(Suele ser el nombre de su bd): ")
+uid=input("Ingrese el atributo UID(Usuario de su bd): ")
+pwd=input("Ingrese el atributo PWD(Contraseña de su bd): ")
+print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCargando los archivos .csv, esto puede tardar un tiempo......")
+connection = pyodbc.connect('DSN='+dsn+';DBQ='+dbq+';Uid='+uid+';Pwd='+pwd+'')
 
 #Se crea el cursor, el cual se utilizará para hacer las modificaciones de la base de datos.
 cursor = connection.cursor()
@@ -437,10 +443,13 @@ BEGIN
  INSERT INTO Nintendo (nombre, genero, desarrollador, publicador, fechadeestreno, exclusividad, ventasglobales, rating) VALUES (:new.nombre,:new.genero,:new.desarrollador,:new.publicador,:new.fechadeestreno,:new.exclusividad,:new.ventasglobales,:new.rating);
 END;""")
 cursor.execute("""CREATE OR REPLACE VIEW rating AS SELECT nombre,rating,fechadeestreno FROM (SELECT nombre,rating,fechadeestreno FROM tabla ORDER BY rating DESC, TO_CHAR(fechadeestreno, 'YYYY-MM-DD') DESC) WHERE ROWNUM <=3;""")
-cursor.execute("""CREATE OR REPLACE VIEW desarrollador AS SELECT desarrollador,vendidos FROM (SELECT desarrollador,vendidos FROM tabla ORDER BY vendidos DESC) WHERE ROWNUM <=3;""")
 cursor.execute("""CREATE OR REPLACE VIEW masvendidosuno AS SELECT nombre, genero, desarrollador, publicador, vendidos FROM (SELECT nombre, genero, desarrollador, publicador, vendidos FROM tabla ORDER BY vendidos DESC) WHERE ROWNUM <=3;""")
 cursor.execute("""CREATE OR REPLACE VIEW masvendidos AS SELECT nombre, genero, desarrollador, publicador, ventasglobales FROM (SELECT nombre, genero, desarrollador, publicador, ventasglobales FROM tabla ORDER BY ventasglobales DESC) WHERE ROWNUM <=3;""")
 cursor.execute("""CREATE OR REPLACE VIEW cincoexclusivos AS SELECT nombre, genero, desarrollador, publicador, precio FROM (SELECT nombre, genero, desarrollador, publicador, precio FROM tabla WHERE exclusividad='Si' ORDER BY precio DESC) WHERE ROWNUM <=5""")
+
+cursor.execute("""CREATE OR REPLACE VIEW desarrollador AS SELECT * FROM (SELECT desarrollador,SUM(vendidos) FROM tabla GROUP BY desarrollador ORDER BY SUM(vendidos) DESC) WHERE ROWNUM <=3""")
+
+
 #
 with open(r"Sansanoplay.csv", mode='r') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
@@ -562,6 +571,8 @@ menuflag=True
 
 
 while(menuflag):
+
+    
     print(colored.cyan("Bienvenido a la Base de datos de Sansanoplay, favor de elegir la opción que desee:\n"))
     print(colored.cyan('1.-')+colored.yellow('Funciones CRUD\n'))
     print(colored.cyan('2.-')+colored.yellow('Los 5 exclusivos más caros\n'))
