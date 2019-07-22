@@ -132,7 +132,7 @@ def read(cursor):
 
                     for row in cursor:
                         print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"+colored.yellow("ID")+colored.cyan("|")+colored.yellow("Nombre del videojuego")+colored.cyan("|")+colored.yellow("Genero")+colored.cyan("|")+colored.yellow("Desarrollador")+colored.cyan("|")+colored.yellow("Publicadora")+colored.cyan("|")+colored.yellow("Exclusividad")+colored.cyan("|")+colored.yellow("Fecha de publicación")+colored.cyan("|")+colored.yellow("Precio")+colored.cyan("|")+colored.yellow("Stock")+colored.cyan("|")+colored.yellow("En Bodega")+colored.cyan("|")+colored.yellow("Ventas locales")+colored.cyan("|")+colored.yellow("Ventas globales")+colored.cyan("|")+colored.yellow("Rating"))
-                        print(colored.yellow(str(row[0]))+colored.cyan("|")+colored.yellow(str(row[1]))+colored.cyan("|")+colored.yellow(str(row[2]))+colored.cyan("|")+colored.yellow(str(row[3]))+colored.cyan("|")+colored.yellow(str(row[4]))+colored.cyan("|")+colored.yellow(str(row[5]))+colored.cyan("|")+colored.yellow(str(row[6]))+colored.cyan("|")+colored.yellow(str(row[7]))+colored.cyan("|")+colored.yellow(str(row[8]))+colored.cyan("|")+colored.yellow(str(row[9]))+colored.cyan("|")+colored.yellow(str(row[10]))+colored.cyan("|")+colored.yellow(str(row[11]))+"\n")
+                        print(colored.yellow(str(row[0]))+colored.cyan("|")+colored.yellow(str(row[1]))+colored.cyan("|")+colored.yellow(str(row[2]))+colored.cyan("|")+colored.yellow(str(row[3]))+colored.cyan("|")+colored.yellow(str(row[4]))+colored.cyan("|")+colored.yellow(str(row[5]))+colored.cyan("|")+colored.yellow(str(row[6]))+colored.cyan("|")+colored.yellow(str(row[7]))+colored.cyan("|")+colored.yellow(str(row[8]))+colored.cyan("|")+colored.yellow(str(row[9]))+colored.cyan("|")+colored.yellow(str(row[10]))+colored.cyan("|")+colored.yellow(str(row[11]))+colored.cyan("|")+colored.yellow(str(row[12]))+"\n")
                 else:
                     flag=False
         elif(pregunta == 2):
@@ -349,13 +349,19 @@ def ventas (cursor):
             print(colored.cyan("Indique la cantidad de existencias vendidas: \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"))
             ventas=input()
             tupla=cursor.fetchone()
-            if(int(tupla[1])-int(ventas)<10):
-                print("\nADVERTENCIA: EL STOCK HA DISMINUIDO DE 10, FAVOR DE EXTRAER POR LO MENOS "+str(10-(int(tupla[1])-int(ventas)))+" EXISTENCIAS DE LA BODEGA LA BASE DE DATOS SE ACTUALIZARÁ AUTOMÁTICAMENTE\n")
-                if(int(tupla[2])-10-(int(tupla[1])-int(ventas)) < 0):
-                    print("NO HAY SUFICIENTES EXISTENCIAS EN BODEGA, DEBE ACTUALIZAR LAS EXISTENCIAS EN STOCK Y BODEGA MANUALMENTE\n")
             stock=int(tupla[1])
             cursor.execute("UPDATE tabla SET stock="+str((stock-int(ventas)))+" WHERE id="+str(dato)+"")
-            print(colored.cyan("VENTA REALIZADA\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"))
+            if((int(tupla[1])+int(tupla[2]))-int(ventas)<0):
+                print("LA VENTA ES SUPERIOR AL STOCK\n")
+                print("VENTA NO REALIZADA\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+            else:
+                if(int(tupla[1])-int(ventas)<10):
+                    print("\nADVERTENCIA: EL STOCK HA DISMINUIDO DE 10, FAVOR DE EXTRAER POR LO MENOS "+str(10-(int(tupla[1])-int(ventas)))+" EXISTENCIAS DE LA BODEGA\n")
+                    print("LA BASE DE DATOS SE ACTUALIZARÁ AUTOMÁTICAMENTE\n")
+                    if(int(tupla[2])-10-(int(tupla[1])-int(ventas)) < 0):
+                        print("NO HAY SUFICIENTES EXISTENCIAS EN BODEGA, DEBE ACTUALIZAR LAS EXISTENCIAS EN STOCK Y BODEGA MANUALMENTE\n")
+                print(colored.cyan("VENTA REALIZADA\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"))
+
             cursor.commit()
             print(colored.red("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPresione cualquier tecla para continuar..."))
             msvcrt.getch()
@@ -367,16 +373,22 @@ def ventas (cursor):
             tupla=cursor.fetchone()
             print(colored.cyan("Indique la cantidad de existencias vendidas: \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"))
             ventas=input()
-            if(int(tupla[1])-int(ventas)<10):
-                print("\nADVERTENCIA: EL STOCK HA DISMINUIDO DE 10, FAVOR DE EXTRAER POR LO MENOS "+str(10-(int(tupla[1])-int(ventas)))+" EXISTENCIAS DE LA BODEGA LA BASE DE DATOS SE ACTUALIZARÁ AUTOMÁTICAMENTE\n")
-                if(int(tupla[2])-10-(int(tupla[1])-int(ventas)) < 0):
-                    print("NO HAY SUFICIENTES EXISTENCIAS EN BODEGA, DEBE ACTUALIZAR LAS EXISTENCIAS EN STOCK Y BODEGA MANUALMENTE\n")
+
             stock=int(tupla[1])
             try:
                 cursor.execute("UPDATE tabla SET stock="+str((stock-int(ventas)))+" WHERE nombre=q'<"+dato+">'")
             except:
                 cursor.execute("UPDATE tabla SET stock="+str((stock-int(ventas)))+" WHERE nombre=q''<"+dato+">''")
-            print(colored.cyan("VENTA REALIZADA\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"))
+            if((int(tupla[1])+int(tupla[2]))-int(ventas)<0):
+                print("LA VENTA ES SUPERIOR AL STOCK\n")
+                print("VENTA NO REALIZADA\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+            else:
+                if(int(tupla[1])-int(ventas)<10):
+                    print("\nADVERTENCIA: EL STOCK HA DISMINUIDO DE 10, FAVOR DE EXTRAER POR LO MENOS "+str(10-(int(tupla[1])-int(ventas)))+" EXISTENCIAS DE LA BODEGA\n")
+                    print("LA BASE DE DATOS SE ACTUALIZARÁ AUTOMÁTICAMENTE\n")
+                    if(int(tupla[2])-10-(int(tupla[1])-int(ventas)) < 0):
+                        print("NO HAY SUFICIENTES EXISTENCIAS EN BODEGA, DEBE ACTUALIZAR LAS EXISTENCIAS EN STOCK Y BODEGA MANUALMENTE\n")
+                print(colored.cyan("VENTA REALIZADA\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"))
             cursor.commit()
             print(colored.red("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPresione cualquier tecla para continuar..."))
             msvcrt.getch()
