@@ -332,13 +332,14 @@ def rating(cursor):
 
 
 def ventas (cursor):
-    print(colored.cyan("--------------------------------------------------------------------\n|")+colored.yellow("Inserte la ID o Nombre del juego que quieres vender")+colored.cyan("|\n--------------------------------------------------------------------\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"))
+    print(colored.cyan("----------------------------------------------------.\n|")+colored.yellow("Inserte la ID o Nombre del juego que quieres vender")+colored.cyan("|\n----------.------------------------------------------\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"))
     dato=input()
     try:
         dato=int(dato)
         if(dato!=0):
             cursor.execute("SELECT id,stock,bodega FROM tabla WHERE id="+str(dato)+"")
-            ventas=input("Indique la cantidad de existencias vendidas: ")
+            print(colored.cyan("Indique la cantidad de existencias vendidas: \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"))
+            ventas=input()
             tupla=cursor.fetchone()
             if(int(tupla[1])-int(ventas)<10):
                 print("\nADVERTENCIA: EL STOCK HA DISMINUIDO DE 10, FAVOR DE EXTRAER POR LO MENOS "+str(10-(int(tupla[1])-int(ventas)))+" EXISTENCIAS DE LA BODEGA LA BASE DE DATOS SE ACTUALIZARÁ AUTOMÁTICAMENTE\n")
@@ -346,7 +347,9 @@ def ventas (cursor):
                     print("NO HAY SUFICIENTES EXISTENCIAS EN BODEGA, DEBE ACTUALIZAR LAS EXISTENCIAS EN STOCK Y BODEGA MANUALMENTE\n")
             stock=int(tupla[1])
             cursor.execute("UPDATE tabla SET stock="+str((stock-int(ventas)))+" WHERE id="+str(dato)+"")
-            print(colored.cyan("STOCK ACTUALIZADO\n"))
+            print(colored.cyan("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSTOCK ACTUALIZADO"))
+            print(colored.red("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPresione cualquier tecla para continuar..."))
+            msvcrt.getch()
     except:
             cursor.execute("SELECT nombre,stock,bodega FROM tabla WHERE nombre='"+dato+"'")
             tupla=cursor.fetchone()
@@ -357,7 +360,10 @@ def ventas (cursor):
                     print("NO HAY SUFICIENTES EXISTENCIAS EN BODEGA, DEBE ACTUALIZAR LAS EXISTENCIAS EN STOCK Y BODEGA MANUALMENTE\n")
             stock=int(tupla[1])
             cursor.execute("UPDATE tabla SET stock="+str((stock-int(ventas)))+" WHERE nombre='"+dato+"'")
-            print(colored.cyan("STOCK ACTUALIZADO\n"))
+            print(colored.cyan("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSTOCK ACTUALIZADO\n"))
+            print(colored.red("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPresione cualquier tecla para continuar..."))
+            msvcrt.getch()
+
 
 
 
