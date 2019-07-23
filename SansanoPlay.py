@@ -21,7 +21,6 @@ uid=input("Ingrese el atributo UID(Usuario de su bd): ")
 pwd=input("Ingrese el atributo PWD(Contraseña de su bd): ")
 print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCargando los archivos .csv, esto puede tardar un tiempo......")
 connection = pyodbc.connect('DSN='+dsn+';DBQ='+dbq+';Uid='+uid+';Pwd='+pwd+'')
-
 #Se crea el cursor, el cual se utilizará para hacer las modificaciones de la base de datos.
 cursor = connection.cursor()
 
@@ -206,13 +205,12 @@ def update(cursor):
                 elif(pregunta==9):
                     cursor.execute("update tabla SET precio='"+str(preguntados)+"' WHERE id="+str(dato)+"")
                 elif(pregunta==10):
-                    cursor.execute("update tabla SET stock="+int(preguntados)+" WHERE id="+str(dato)+"")
                     if(int(preguntados) < 10):
                         bodega=10-int(preguntados)
                         print(colored.cyan("ADVERTENCIA: EL STOCK HA LLEGADO A SU LÍMITE DE MENOS DE 10 UNIDADES, SE DEBEN DE SACAR "+str(bodega)+" EXISTENCIAS DE LA BODEGA COMO MÍNIMO, LA BASE DE DATOS SE ACTUALIZARÁ AUTOMATICAMENTE CON EL MÍNIMO INDICADO DESCONTANDOLO DE LA BODEGA.\n"))
                         print(colored.red("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPresione cualquier tecla para continuar..."))
-                        if(msvcrt.getch()):
-                            continue
+                        msvcrt.getch()
+                    cursor.execute("update tabla SET stock="+str(preguntados)+" WHERE id="+str(dato)+"")
                 elif(pregunta==11):
                     cursor.execute("update tabla SET bodega='"+str(preguntados)+"' WHERE id="+str(dato)+"")
                 elif(pregunta==12):
@@ -222,6 +220,11 @@ def update(cursor):
                 elif(pregunta==14):
                     cursor.execute("update tabla SET rating='"+str(preguntados)+"' WHERE id="+str(dato)+"")
     except:
+        try:
+            cursor.execute("SELECT id FROM tabla WHERE nombre=q'<"+dato+">'")
+        except:
+            cursor.execute("SELECT id FROM tabla WHERE nombre=q''<"+dato+">''")
+        dato=cursor.fetchone()[0]
         while(flag):
             print(colored.cyan("¿Que quieres modificar?\n1.-")+colored.yellow("Aceptar cambios\n")+colored.cyan("2.-")+colored.yellow("Cancelar Cambios\n")+colored.cyan("3.-")+colored.yellow("Nombre\n")+colored.cyan("4.-")+colored.yellow("Genero\n")+colored.cyan("5.-")+colored.yellow("Desarrollador\n")+colored.cyan("6.-")+colored.yellow("Publicador\n")+colored.cyan("7.-")+colored.yellow("Fecha de estreno\n")+colored.cyan("8.-")+colored.yellow("Exclusividad\n")+colored.cyan("9.-")+colored.yellow("Precio\n")+colored.cyan("10.-")+colored.yellow("Stock\n")+colored.cyan("11.-")+colored.yellow("Bodega\n")+colored.cyan("12.-")+colored.yellow("Cantidad Vendidos Local\n")+colored.cyan("13.-")+colored.yellow("Cantidad Vendidos Global\n")+colored.cyan("14.-")+colored.yellow("Rating\n")+colored.cyan("\n\n\n\n\n\n\n\n\n\n\n\n\nIngrese su opción: "))
             pregunta = int(input())
@@ -261,7 +264,12 @@ def update(cursor):
             elif(pregunta==9):
                 cursor.execute("update tabla SET precio='"+str(preguntados)+"' WHERE id="+str(dato)+"")
             elif(pregunta==10):
-                cursor.execute("update tabla SET stock='"+str(preguntados)+"' WHERE id="+str(dato)+"")
+                if(int(preguntados) < 10):
+                    bodega=10-int(preguntados)
+                    print(colored.cyan("ADVERTENCIA: EL STOCK HA LLEGADO A SU LÍMITE DE MENOS DE 10 UNIDADES, SE DEBEN DE SACAR "+str(bodega)+" EXISTENCIAS DE LA BODEGA COMO MÍNIMO, LA BASE DE DATOS SE ACTUALIZARÁ AUTOMATICAMENTE CON EL MÍNIMO INDICADO DESCONTANDOLO DE LA BODEGA.\n"))
+                    print(colored.red("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPresione cualquier tecla para continuar..."))
+                    msvcrt.getch()
+                cursor.execute("update tabla SET stock="+str(preguntados)+" WHERE id="+str(dato)+"")
             elif(pregunta==11):
                 cursor.execute("update tabla SET bodega='"+str(preguntados)+"' WHERE id="+str(dato)+"")
             elif(pregunta==12):
@@ -347,7 +355,8 @@ def ventas (cursor):
                     print("NO HAY SUFICIENTES EXISTENCIAS EN BODEGA, DEBE ACTUALIZAR LAS EXISTENCIAS EN STOCK Y BODEGA MANUALMENTE\n")
             stock=int(tupla[1])
             cursor.execute("UPDATE tabla SET stock="+str((stock-int(ventas)))+" WHERE id="+str(dato)+"")
-            print(colored.cyan("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSTOCK ACTUALIZADO"))
+            print(colored.cyan("VENTA REALIZADA\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"))
+            cursor.commit()
             print(colored.red("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPresione cualquier tecla para continuar..."))
             msvcrt.getch()
     except:
@@ -356,7 +365,8 @@ def ventas (cursor):
             except:
                 cursor.execute("SELECT nombre,stock,bodega FROM tabla WHERE nombre=q''<"+dato+">''")
             tupla=cursor.fetchone()
-            ventas=input("Indique la cantidad de existencias vendidas: ")
+            print(colored.cyan("Indique la cantidad de existencias vendidas: \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"))
+            ventas=input()
             if(int(tupla[1])-int(ventas)<10):
                 print("\nADVERTENCIA: EL STOCK HA DISMINUIDO DE 10, FAVOR DE EXTRAER POR LO MENOS "+str(10-(int(tupla[1])-int(ventas)))+" EXISTENCIAS DE LA BODEGA LA BASE DE DATOS SE ACTUALIZARÁ AUTOMÁTICAMENTE\n")
                 if(int(tupla[2])-10-(int(tupla[1])-int(ventas)) < 0):
@@ -366,7 +376,8 @@ def ventas (cursor):
                 cursor.execute("UPDATE tabla SET stock="+str((stock-int(ventas)))+" WHERE nombre=q'<"+dato+">'")
             except:
                 cursor.execute("UPDATE tabla SET stock="+str((stock-int(ventas)))+" WHERE nombre=q''<"+dato+">''")
-            print(colored.cyan("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSTOCK ACTUALIZADO\n"))
+            print(colored.cyan("VENTA REALIZADA\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"))
+            cursor.commit()
             print(colored.red("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPresione cualquier tecla para continuar..."))
             msvcrt.getch()
 
