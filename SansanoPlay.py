@@ -340,7 +340,7 @@ def rating(cursor):
 
 
 def ventas (cursor):
-    print(colored.cyan("----------------------------------------------------.\n|")+colored.yellow("Inserte la ID o Nombre del juego que quieres vender")+colored.cyan("|\n----------.------------------------------------------\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"))
+    print(colored.cyan("----------------------------------------------------.\n|")+colored.yellow("Inserte la ID o Nombre del juego que quieres vender")+colored.cyan("|\n-----------------------------------------------------\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"))
     dato=input()
     try:
         dato=int(dato)
@@ -350,14 +350,18 @@ def ventas (cursor):
             ventas=input()
             tupla=cursor.fetchone()
             if(int(tupla[1])-int(ventas)<10):
-                print("\nADVERTENCIA: EL STOCK HA DISMINUIDO DE 10, FAVOR DE EXTRAER POR LO MENOS "+str(10-(int(tupla[1])-int(ventas)))+" EXISTENCIAS DE LA BODEGA LA BASE DE DATOS SE ACTUALIZARÁ AUTOMÁTICAMENTE\n")
+                print(colored.cyan("\nADVERTENCIA: EL STOCK HA DISMINUIDO DE 10, FAVOR DE EXTRAER POR LO MENOS "+str(10-(int(tupla[1])-int(ventas)))+" EXISTENCIAS DE LA BODEGA LA BASE DE DATOS SE ACTUALIZARÁ AUTOMÁTICAMENTE\n"))
                 if(int(tupla[2])-10-(int(tupla[1])-int(ventas)) < 0):
-                    print("NO HAY SUFICIENTES EXISTENCIAS EN BODEGA, DEBE ACTUALIZAR LAS EXISTENCIAS EN STOCK Y BODEGA MANUALMENTE\n")
+                    print(colored.cyan("NO HAY SUFICIENTES EXISTENCIAS EN BODEGA, DEBE ACTUALIZAR LAS EXISTENCIAS EN STOCK Y BODEGA MANUALMENTE\n"))
+                    print(colored.cyan("VENTA REALIZADA"))
+                else:
+                    print(colored.cyan("VENTA REALIZADA"))
+            else:
+                print(colored.cyan("VENTA REALIZADA\n\n\n"))
             stock=int(tupla[1])
             cursor.execute("UPDATE tabla SET stock="+str((stock-int(ventas)))+" WHERE id="+str(dato)+"")
-            print(colored.cyan("VENTA REALIZADA\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"))
             cursor.commit()
-            print(colored.red("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPresione cualquier tecla para continuar..."))
+            print(colored.red("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPresione cualquier tecla para continuar..."))
             msvcrt.getch()
     except:
             try:
@@ -368,17 +372,22 @@ def ventas (cursor):
             print(colored.cyan("Indique la cantidad de existencias vendidas: \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"))
             ventas=input()
             if(int(tupla[1])-int(ventas)<10):
-                print("\nADVERTENCIA: EL STOCK HA DISMINUIDO DE 10, FAVOR DE EXTRAER POR LO MENOS "+str(10-(int(tupla[1])-int(ventas)))+" EXISTENCIAS DE LA BODEGA LA BASE DE DATOS SE ACTUALIZARÁ AUTOMÁTICAMENTE\n")
+                print(colored.cyan("\nADVERTENCIA: EL STOCK HA DISMINUIDO DE 10, FAVOR DE EXTRAER POR LO MENOS "+str(10-(int(tupla[1])-int(ventas)))+" EXISTENCIAS DE LA BODEGA LA BASE DE DATOS SE ACTUALIZARÁ AUTOMÁTICAMENTE\n"))
                 if(int(tupla[2])-10-(int(tupla[1])-int(ventas)) < 0):
-                    print("NO HAY SUFICIENTES EXISTENCIAS EN BODEGA, DEBE ACTUALIZAR LAS EXISTENCIAS EN STOCK Y BODEGA MANUALMENTE\n")
+                    print(colored.cyan("NO HAY SUFICIENTES EXISTENCIAS EN BODEGA, DEBE ACTUALIZAR LAS EXISTENCIAS EN STOCK Y BODEGA MANUALMENTE\n"))
+                    print(colored.cyan("VENTA REALIZADA"))
+                else:
+                    print(colored.cyan("VENTA REALIZADA"))
+            else:
+                print(colored.cyan("VENTA REALIZADA\n\n\n"))
             stock=int(tupla[1])
             try:
                 cursor.execute("UPDATE tabla SET stock="+str((stock-int(ventas)))+" WHERE nombre=q'<"+dato+">'")
             except:
                 cursor.execute("UPDATE tabla SET stock="+str((stock-int(ventas)))+" WHERE nombre=q''<"+dato+">''")
-            print(colored.cyan("VENTA REALIZADA\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"))
+
             cursor.commit()
-            print(colored.red("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPresione cualquier tecla para continuar..."))
+            print(colored.red("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPresione cualquier tecla para continuar..."))
             msvcrt.getch()
 
 
