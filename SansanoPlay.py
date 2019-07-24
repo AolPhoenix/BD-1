@@ -132,7 +132,7 @@ def read(cursor):
 
                     for row in cursor:
                         print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"+colored.yellow("ID")+colored.cyan("|")+colored.yellow("Nombre del videojuego")+colored.cyan("|")+colored.yellow("Genero")+colored.cyan("|")+colored.yellow("Desarrollador")+colored.cyan("|")+colored.yellow("Publicadora")+colored.cyan("|")+colored.yellow("Exclusividad")+colored.cyan("|")+colored.yellow("Fecha de publicación")+colored.cyan("|")+colored.yellow("Precio")+colored.cyan("|")+colored.yellow("Stock")+colored.cyan("|")+colored.yellow("En Bodega")+colored.cyan("|")+colored.yellow("Ventas locales")+colored.cyan("|")+colored.yellow("Ventas globales")+colored.cyan("|")+colored.yellow("Rating"))
-                        print(colored.yellow(str(row[0]))+colored.cyan("|")+colored.yellow(str(row[1]))+colored.cyan("|")+colored.yellow(str(row[2]))+colored.cyan("|")+colored.yellow(str(row[3]))+colored.cyan("|")+colored.yellow(str(row[4]))+colored.cyan("|")+colored.yellow(str(row[5]))+colored.cyan("|")+colored.yellow(str(row[6]))+colored.cyan("|")+colored.yellow(str(row[7]))+colored.cyan("|")+colored.yellow(str(row[8]))+colored.cyan("|")+colored.yellow(str(row[9]))+colored.cyan("|")+colored.yellow(str(row[10]))+colored.cyan("|")+colored.yellow(str(row[11]))+"\n")
+                        print(colored.yellow(str(row[0]))+colored.cyan("|")+colored.yellow(str(row[1]))+colored.cyan("|")+colored.yellow(str(row[2]))+colored.cyan("|")+colored.yellow(str(row[3]))+colored.cyan("|")+colored.yellow(str(row[4]))+colored.cyan("|")+colored.yellow(str(row[5]))+colored.cyan("|")+colored.yellow(str(row[6]))+colored.cyan("|")+colored.yellow(str(row[7]))+colored.cyan("|")+colored.yellow(str(row[8]))+colored.cyan("|")+colored.yellow(str(row[9]))+colored.cyan("|")+colored.yellow(str(row[10]))+colored.cyan("|")+colored.yellow(str(row[11]))+colored.cyan("|")+colored.yellow(str(row[12]))+"\n")
                 else:
                     flag=False
         elif(pregunta == 2):
@@ -356,7 +356,7 @@ def ventas (cursor):
                     print(colored.cyan("VENTA REALIZADA"))
                 else:
                     print(colored.cyan("VENTA REALIZADA"))
-                    
+
             else:
                 print(colored.cyan("VENTA REALIZADA\n\n\n"))
             stock=int(tupla[1])
