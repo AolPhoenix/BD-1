@@ -356,6 +356,7 @@ def ventas (cursor):
                     print(colored.cyan("VENTA REALIZADA"))
                 else:
                     print(colored.cyan("VENTA REALIZADA"))
+                    
             else:
                 print(colored.cyan("VENTA REALIZADA\n\n\n"))
             stock=int(tupla[1])
